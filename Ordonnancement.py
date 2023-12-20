@@ -33,3 +33,10 @@ class Ordonnancemement:
     def ajouter_liste_jobs(self, jobs : list[Job]):
         for job in jobs:
             self.ajouter_job(job)
+
+    def getCMax(self):
+        return self.date_dispo[self.nb_machines - 1]
+    
+    #TODO
+    def getRandomVois():
+        return Ordonnancemement(1)
