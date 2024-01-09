@@ -1,5 +1,5 @@
 from Job import Job
-from Ordonnancement import Ordonnancemement
+from Ordonnancement import Ordonnancement
 
 class Flowshop:
     def __init__(self, liste_jobs : list[Job], nb_machines : int) -> None:
@@ -47,7 +47,6 @@ class Flowshop:
         temps_tot_jobs = [[sum(job.temps_machines), job] for job in self.liste_jobs]
         temps_tot_jobs.sort(key=lambda j: j[0], reverse = True)
         seq_NEH.append(temps_tot_jobs[0][1])
-        print("dGQGEZQG")
         for j in temps_tot_jobs:
             j[1].afficher_job()
         for i in range(1,len(temps_tot_jobs)):

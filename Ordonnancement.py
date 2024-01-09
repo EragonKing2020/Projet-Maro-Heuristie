@@ -1,7 +1,7 @@
 from Job import Job
 import random
 
-class Ordonnancemement:
+class Ordonnancement:
     def __init__(self, nb_machines : int, liste_jobs : list[Job] = []) -> None:
         self.nb_machines : int = nb_machines
         self.date_dispo : list[int] = [0 for i in range(nb_machines)]
