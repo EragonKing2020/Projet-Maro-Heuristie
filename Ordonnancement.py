@@ -1,4 +1,5 @@
 from Job import Job
+import random
 
 class Ordonnancemement:
     def __init__(self, nb_machines : int, liste_jobs : list[Job] = []) -> None:
@@ -38,5 +39,7 @@ class Ordonnancemement:
         return self.date_dispo[self.nb_machines - 1]
     
     #TODO
-    def getRandomVois():
-        return Ordonnancemement(1)
+    def getRandomVois(self):
+        lstVois = self.ordreJob.copy()
+        random.shuffle(lstVois)
+        return Ordonnancemement(self.nb_machines, lstVois)
