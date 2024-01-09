@@ -6,7 +6,7 @@ import time
 
 class Recuit:
     def step(temperature : float, ordoActuel : Ordonnancemement):
-        ordoVois = ordoActuel.getRandomVois()
+        ordoVois = ordoActuel.getRandomVoisInverseSeq()
         if ordoActuel.getCMax() > ordoVois.getCMax():
             return ordoVois
         else :
@@ -18,8 +18,14 @@ class Recuit:
     def probPrendreNext(temperature, deltaE):
         return random.random() <= math.exp(- deltaE/temperature)
     
-    def recherche(flowshop : Flowshop, temperature : int, time_limit : int = 60) -> Ordonnancemement:
-        ordo = Ordonnancemement(flowshop.nb_machines, flowshop.liste_jobs)
+    def recherche(flowshop : Flowshop, temperature : int, time_limit : int = 60, ordoInit : Ordonnancemement|None = None) -> Ordonnancemement:
+        if ordoInit == None:
+            lst_job_shuffled = flowshop.liste_jobs.copy()
+            random.shuffle(lst_job_shuffled)
+            ordoInit = Ordonnancemement(flowshop.nb_machines, lst_job_shuffled)
+        print("Ordo Init")
+        ordoInit.afficher_ordo()
+        ordo = ordoInit
         ordoOpti = ordo
         start_time = time.perf_counter()
         while (time.perf_counter() - start_time <= time_limit):

@@ -38,8 +38,33 @@ class Ordonnancemement:
     def getCMax(self):
         return self.date_dispo[self.nb_machines - 1]
     
-    #TODO
+    def getNbJobs(self):
+        return len(self.ordreJob)
+
     def getRandomVois(self):
         lstVois = self.ordreJob.copy()
         random.shuffle(lstVois)
+        return Ordonnancemement(self.nb_machines, lstVois)
+    
+    def getRandomVoisCouple(self):
+        lstVois = self.ordreJob.copy()
+        jobsExchanges = random.sample(range(self.getNbJobs()), 2)
+        lstVois[jobsExchanges[0]], lstVois[jobsExchanges[1]] = lstVois[jobsExchanges[1]], lstVois[jobsExchanges[0]]
+        return Ordonnancemement(self.nb_machines, lstVois)
+    
+    def getRandomVoisInverseSeq(self):
+        bornesSeq = random.sample(range(self.getNbJobs() + 1), 2)
+        bornesSeq.sort()
+        lstVois = self.ordreJob.copy()
+        for i in range(bornesSeq[0], bornesSeq[1]):
+            lstVois[i] = self.ordreJob[bornesSeq[1] + bornesSeq[0] - i - 1]
+        return Ordonnancemement(self.nb_machines, lstVois)
+    
+    def getRandomVoisPermSeq(self):
+        bornesSeq = random.sample(range(self.getNbJobs() + 1), 2)
+        bornesSeq.sort()
+        lstVois = self.ordreJob.copy()
+        for i in range(bornesSeq[0], bornesSeq[1] - 1):
+            lstVois[i] = self.ordreJob[i + 1]
+        lstVois[bornesSeq[1] - 1] = self.ordreJob[bornesSeq[0]]
         return Ordonnancemement(self.nb_machines, lstVois)
