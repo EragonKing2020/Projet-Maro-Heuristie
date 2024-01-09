@@ -1,7 +1,7 @@
 from Job import Job
 import random
 
-class Ordonnancemement:
+class Ordonnancement:
     def __init__(self, nb_machines : int, liste_jobs : list[Job] = []) -> None:
         self.nb_machines : int = nb_machines
         self.date_dispo : list[int] = [0 for i in range(nb_machines)]
@@ -44,27 +44,63 @@ class Ordonnancemement:
     def getRandomVois(self):
         lstVois = self.ordreJob.copy()
         random.shuffle(lstVois)
-        return Ordonnancemement(self.nb_machines, lstVois)
+        return Ordonnancement(self.nb_machines, lstVois)
     
-    def getRandomVoisCouple(self):
+    def getVoisCouple(self, i1, i2):
         lstVois = self.ordreJob.copy()
+        lstVois[i1], lstVois[i2] = lstVois[i2], lstVois[i1]
+        return Ordonnancement(self.nb_machines, lstVois)
+
+    def getRandomVoisCouple(self):
         jobsExchanges = random.sample(range(self.getNbJobs()), 2)
-        lstVois[jobsExchanges[0]], lstVois[jobsExchanges[1]] = lstVois[jobsExchanges[1]], lstVois[jobsExchanges[0]]
-        return Ordonnancemement(self.nb_machines, lstVois)
+        return self.getVoisCouple(jobsExchanges[0], jobsExchanges[1])
     
+    def getAllVoisCouple(self):
+        lstAllVois = [None for i in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
+        i = 0
+        for i1 in range(self.getNbJobs() - 1):
+            for i2 in range(i1 + 1, self.getNbJobs()):
+                lstAllVois[i] = self.getVoisCouple(i1, i2)
+                i += 1
+        return lstAllVois
+
+    def getVoisInverseSeq(self, i1, i2):
+        lstVois = self.ordreJob.copy()
+        for i in range(i1, i2):
+            lstVois[i] = self.ordreJob[i2 + i1 - i - 1]
+        return Ordonnancement(self.nb_machines, lstVois)
+
     def getRandomVoisInverseSeq(self):
         bornesSeq = random.sample(range(self.getNbJobs() + 1), 2)
         bornesSeq.sort()
-        lstVois = self.ordreJob.copy()
-        for i in range(bornesSeq[0], bornesSeq[1]):
-            lstVois[i] = self.ordreJob[bornesSeq[1] + bornesSeq[0] - i - 1]
-        return Ordonnancemement(self.nb_machines, lstVois)
+        return self.getVoisInverseSeq(bornesSeq[0], bornesSeq[1])
     
+    def getAllVoisInverseSeq(self):
+        lstAllVois = [None for i in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
+        i = 0
+        for i1 in range(self.getNbJobs() - 2):
+            for i2 in range(i1 + 2, self.getNbJobs()):
+                lstAllVois[i] = self.getVoisCouple(i1, i2)
+                i += 1
+        return lstAllVois
+
+    def getVoisPermSeq(self, i1, i2):
+        lstVois = self.ordreJob.copy()
+        for i in range(i1, i2 - 1):
+            lstVois[i] = self.ordreJob[i + 1]
+        lstVois[i2 - 1] = self.ordreJob[i1]
+        return Ordonnancement(self.nb_machines, lstVois)
+
     def getRandomVoisPermSeq(self):
         bornesSeq = random.sample(range(self.getNbJobs() + 1), 2)
         bornesSeq.sort()
-        lstVois = self.ordreJob.copy()
-        for i in range(bornesSeq[0], bornesSeq[1] - 1):
-            lstVois[i] = self.ordreJob[i + 1]
-        lstVois[bornesSeq[1] - 1] = self.ordreJob[bornesSeq[0]]
-        return Ordonnancemement(self.nb_machines, lstVois)
+        return self.getVoisPermSeq(bornesSeq[0], bornesSeq[1])
+    
+    def getAllVoisPermSeq(self):
+        lstAllVois = [None for i in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
+        i = 0
+        for i1 in range(self.getNbJobs() - 2):
+            for i2 in range(i1 + 2, self.getNbJobs()):
+                lstAllVois[i] = self.getVoisCouple(i1, i2)
+                i += 1
+        return lstAllVois

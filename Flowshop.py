@@ -1,5 +1,5 @@
 from Job import Job
-from Ordonnancement import Ordonnancemement
+from Ordonnancement import Ordonnancement
 
 class Flowshop:
     def __init__(self, liste_jobs : list[Job], nb_machines : int) -> None:
@@ -53,14 +53,14 @@ class Flowshop:
         for i in range(1,len(temps_tot_jobs)):
             seq_NEH_Avant = seq_NEH.copy()
             seq_NEH.append(temps_tot_jobs[i][1])
-            ordo = Ordonnancemement(self.nb_machines, seq_NEH)
+            ordo = Ordonnancement(self.nb_machines, seq_NEH)
             ordoMin = ordo.date_dispo[self.nb_machines-1]
             for j in range(i):
                 seq_j = seq_NEH_Avant.copy()
                 seq_j.insert(j, temps_tot_jobs[i][1])
-                ordo = Ordonnancemement(self.nb_machines, seq_j)
+                ordo = Ordonnancement(self.nb_machines, seq_j)
                 if ordoMin > ordo.date_dispo[self.nb_machines-1]:
                     ordoMin = ordo.date_dispo[self.nb_machines-1]
                     seq_NEH = seq_j
-        Ordonnancemement(self.nb_machines, seq_NEH).afficher_ordo()
+        Ordonnancement(self.nb_machines, seq_NEH).afficher_ordo()
         return seq_NEH
