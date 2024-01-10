@@ -51,10 +51,18 @@ class Genetique():
                 child[doublon] = e
                 manquants.remove(e)
         self.population = new_population
-            
 
+    def mutation(self):
+        for i in range(round(self.taille_population*self.taux_mutation)):
+            pos1,pos2 = random.randint(0,len(self.population[0])-1),random.randint(0,len(self.population[0])-1)
+            while (pos1==pos2):
+                pos2 = random.randint(0,len(self.population[0]))
+            mutant = random.choice(self.population)
+            mutant[pos1],mutant[pos2] = mutant[pos2],mutant[pos1]
+
+    
 
 
 if __name__ == "__main__":
     # print(Flowshop.lire_flowshop("jeu2-704.txt").afficher_flowshop())
-    Genetique(11,Flowshop.lire_flowshop("jeu2-704.txt"),0.1).croisement(2)
+    Genetique(10,Flowshop.lire_flowshop("jeu2-704.txt"),0.2).mutation()
