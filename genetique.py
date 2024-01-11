@@ -11,7 +11,7 @@ class Genetique():
         self.population = [None for _ in range(pop_size)]
         i = 0
         while i < pop_size:
-            ordo_candidat = random.sample(range(flowshop.nb_machines),flowshop.nb_machines)
+            ordo_candidat = random.sample(range(len(flowshop.liste_jobs)),len(flowshop.liste_jobs))
             test = True
             for j in range(i):
                 if self.population[j] == ordo_candidat:
@@ -20,7 +20,7 @@ class Genetique():
                 self.population[i] = ordo_candidat
                 i+=1
         self.meilleur_temps = 10**20
-        self.meilleure_solution = [None for _ in range(flowshop.nb_machines)]
+        self.meilleure_solution = [None for _ in range(len(flowshop.liste_jobs))]
                    
     def croisement(self,pos):
         """On choisit aléatoirement des élément de la population des parent que l'on croise à l'indice pos puis on les corrige et on récupère la moitié des parents et la moitié des enfants"""
@@ -84,12 +84,11 @@ class Genetique():
                 for job in self.flowshop.liste_jobs:
                     if job.num_job == candidat[i] :
                         liste_jobs[i] = job
-            ordo = Ordonnancement(len(candidat),liste_jobs)
-            ordo.afficher_ordo()
-            for job in liste_jobs :
-                job.afficher_job()
+            ordo = Ordonnancement(self.flowshop.nb_machines,liste_jobs)
+            # ordo.afficher_ordo()
+            # for job in liste_jobs :
+            #     job.afficher_job()
             if ordo.getCMax()<self.meilleur_temps:
-                print('ok')
                 self.meilleur_temps = ordo.getCMax()
                 self.meilleure_solution = candidat
         return self.meilleur_temps
