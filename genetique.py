@@ -21,19 +21,20 @@ class Genetique():
                 i+=1
                    
     def croisement(self,pos):
+        population = self.population.copy()
         new_population = [None for _ in range(self.taille_population)]
         for i in range(floor(self.taille_population/2)):
-            parent1 = random.choice(self.population)
-            self.population.remove(parent1)
-            parent2 = random.choice(self.population)
-            self.population.remove(parent2)
+            parent1 = random.choice(population)
+            population.remove(parent1)
+            parent2 = random.choice(population)
+            population.remove(parent2)
             enfant1 = parent1[:pos] + parent2[pos:]
             enfant2 = parent2[:pos] + parent1[pos:]
             new_population[2*i] = enfant1
             new_population[2*i+1] = enfant2
         for i in range(self.taille_population):
             if new_population[len(new_population)-1-i] == None:
-                new_population[len(new_population)-1-i] = self.population[i]
+                new_population[len(new_population)-1-i] = population[i]
         for child in new_population:
             infos = [None for _ in range(len(child))]
             doublons = []
@@ -50,7 +51,11 @@ class Genetique():
                 e = random.choice(manquants)
                 child[doublon] = e
                 manquants.remove(e)
-        self.population = new_population
+        population = [None for _ in range(self.taille_population)]
+        for i in range(self.taille_population):
+            population[i] = random.choice(self.population + new_population)
+        self.population = population
+
 
     def mutation(self):
         for i in range(round(self.taille_population*self.taux_mutation)):
@@ -65,4 +70,4 @@ class Genetique():
 
 if __name__ == "__main__":
     # print(Flowshop.lire_flowshop("jeu2-704.txt").afficher_flowshop())
-    Genetique(10,Flowshop.lire_flowshop("jeu2-704.txt"),0.2).mutation()
+    Genetique(10,Flowshop.lire_flowshop("jeu2-704.txt"),0.2).croisement(2)
