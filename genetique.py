@@ -21,6 +21,7 @@ class Genetique():
                 i+=1
                    
     def croisement(self,pos):
+        print(self.population,"\n")
         population = self.population.copy()
         new_population = [None for _ in range(self.taille_population)]
         for i in range(floor(self.taille_population/2)):
@@ -32,6 +33,7 @@ class Genetique():
             enfant2 = parent2[:pos] + parent1[pos:]
             new_population[2*i] = enfant1
             new_population[2*i+1] = enfant2
+            print(parent1,"\t",parent2,"\t",enfant1,"\t",enfant2)
         for i in range(self.taille_population):
             if new_population[len(new_population)-1-i] == None:
                 new_population[len(new_population)-1-i] = population[i]
@@ -53,8 +55,14 @@ class Genetique():
                 manquants.remove(e)
         population = [None for _ in range(self.taille_population)]
         for i in range(self.taille_population):
-            population[i] = random.choice(self.population + new_population)
+            if i%2 == 0:
+                population[i] = random.choice(self.population)
+                self.population.remove(population[i])
+            if i%2 == 1:
+                population[i] = random.choice(new_population)
+                new_population.remove(population[i])
         self.population = population
+        print("\n",self.population)
 
 
     def mutation(self):
