@@ -2,6 +2,7 @@ from Flowshop import Flowshop
 from Ordonnancement import Ordonnancement
 import random
 from math import floor
+import time
 
 class Genetique():
     def __init__(self,pop_size : int , flowshop : Flowshop, taux_mutation : float):
@@ -95,11 +96,18 @@ class Genetique():
 
     def recherche(self,nb_iterations : int):
         """méthode principale du GA pour trouver une solution optimale à un flow shop"""
-        for i in range(nb_iterations):
+        temps_debut=time.time()
+        while (time.time() - temps_debut) < 300:
             pos = random.randint(0,len(self.population[0]))
             self.croisement(pos)
             self.mutation()
             self.eval()
+        time.sleep(1)
+        "for i in range(nb_iterations):"
+        "pos = random.randint(0,len(self.population[0]))"
+        "self.croisement(pos)"
+        "self.mutation()"
+        "self.eval()"
         print("La meilleur solution trouvée avec l'algorithme génétique au bout de ",nb_iterations," itérations est :")
         liste_jobs = [None for _ in range(len(self.meilleure_solution))]
         for i in range(len(self.meilleure_solution)) :
@@ -113,6 +121,14 @@ class Genetique():
 
 if __name__ == "__main__":
     # print(Flowshop.lire_flowshop("jeu2-704.txt").afficher_flowshop())
-    algo = Genetique(90,Flowshop.lire_flowshop("jeu2-704.txt"),0.2)
+    algo = Genetique(500,Flowshop.lire_flowshop("tai31.txt"),0.4)
+    algo2 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
+    algo3 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
+    algo4 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
+    algo5 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
     # algo.croisement(2)
-    algo.recherche(1000)
+    algo.recherche(5000)
+    "algo2.recherche(5000)"
+    "algo3.recherche(5000)"
+    "algo4.recherche(5000)"
+    "algo5.recherche(5000)"
