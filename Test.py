@@ -5,11 +5,11 @@ from Recuit import Recuit
 import os
 
 def test():
-    flowshop = Flowshop.lire_flowshop(os.getcwd() + "\jeu2-704.txt")
+    flowshop = Flowshop.lire_flowshop(os.getcwd() + "\jeu4-844.txt")
     lst_NEH = flowshop.liste_NEH()
     Ordonnancement(5, lst_NEH).afficher_ordo()
-    #Recuit.recherche(flowshop, 100000, 2, Ordonnancement(flowshop.nb_machines, flowshop.liste_NEH())).afficher_ordo()
-    Recuit.recherche(flowshop, 1, 1).afficher_ordo()
+    #Recuit.recherche(flowshop, 5, 300, Ordonnancement(flowshop.nb_machines, flowshop.liste_NEH())).afficher_ordo()
+    Recuit.recherche(flowshop, 1, 300).afficher_ordo()
 
 #test()
 
@@ -33,6 +33,6 @@ def test2():
     job5 = Job(5, [1])
     job6 = Job(6, [1])
     ordo = Ordonnancement(1, [job1, job2, job3, job4, job5, job6])
-    ordo.getRandomVoisCouple().afficher_ordo()
+    ordo.getRandomVoisExchangeSeq().afficher_ordo()
 
 test2()

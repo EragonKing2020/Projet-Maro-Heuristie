@@ -56,7 +56,7 @@ class Ordonnancement:
         return self.getVoisCouple(jobsExchanges[0], jobsExchanges[1])
     
     def getAllVoisCouple(self):
-        lstAllVois = [None for i in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
+        lstAllVois = [None for _ in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
         i = 0
         for i1 in range(self.getNbJobs() - 1):
             for i2 in range(i1 + 1, self.getNbJobs()):
@@ -76,7 +76,7 @@ class Ordonnancement:
         return self.getVoisInverseSeq(bornesSeq[0], bornesSeq[1])
     
     def getAllVoisInverseSeq(self):
-        lstAllVois = [None for i in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
+        lstAllVois = [None for _ in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
         i = 0
         for i1 in range(self.getNbJobs() - 2):
             for i2 in range(i1 + 2, self.getNbJobs()):
@@ -97,10 +97,34 @@ class Ordonnancement:
         return self.getVoisPermSeq(bornesSeq[0], bornesSeq[1])
     
     def getAllVoisPermSeq(self):
-        lstAllVois = [None for i in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
+        lstAllVois = [None for _ in range(self.getNbJobs() * (self.getNbJobs() - 1) / 2)]
         i = 0
         for i1 in range(self.getNbJobs() - 2):
             for i2 in range(i1 + 2, self.getNbJobs()):
                 lstAllVois[i] = self.getVoisCouple(i1, i2)
                 i += 1
         return lstAllVois
+    
+    def getVoisExchangeSeq(self, i1, i2, i3, i4):
+        lstVois = self.ordreJob[:i1]
+        lstVois += self.ordreJob[i3:i4]
+        lstVois += self.ordreJob[i2:i3]
+        lstVois += self.ordreJob[i1:i2]
+        lstVois += self.ordreJob[i4:]
+        return Ordonnancement(self.nb_machines, lstVois)
+    
+    def getRandomVoisExchangeSeq(self):
+        bornesSeq = random.sample(range(self.getNbJobs() + 1), 4)
+        bornesSeq.sort()
+        return self.getVoisExchangeSeq(bornesSeq[0], bornesSeq[1], bornesSeq[2] - 1, bornesSeq[3] - 1)
+
+    def getAllVoisExchangeSeq(self):
+        n = self.getNbJobs()
+        lstAllVois = [None for _ in range()]
+        i = 0
+        for i1 in range(self.getNbJobs()-1):
+            for i2 in range(i1 + 1, self.getNbJobs()):
+                for i3 in range(i2, self.getNbJobs()):
+                    for i4 in range(i3 + 1, self.getNbJobs() + 1):
+                        lstAllVois[i] = self.getVoisExchangeSeq(i1, i2, i3, i4)
+                        i += 1
