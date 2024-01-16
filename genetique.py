@@ -148,3 +148,4 @@ if __name__ == "__main__":
     "algo3.recherche(5000)"
     "algo4.recherche(5000)"
     "algo5.recherche(5000)"
+
