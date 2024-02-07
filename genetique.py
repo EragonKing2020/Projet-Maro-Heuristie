@@ -1,6 +1,7 @@
 from Flowshop import Flowshop
 from Ordonnancement import Ordonnancement
 import random
+from random import randint,shuffle
 from math import floor
 import time
 
@@ -22,6 +23,8 @@ class Genetique():
                 i+=1
         self.meilleur_temps = 10**20
         self.meilleure_solution = [None for _ in range(len(flowshop.liste_jobs))]
+        self.copied=self.population.copy()
+        
                    
     def croisement(self,pos : int):
         """On choisit aléatoirement des élément de la population des parent que l'on croise à l'indice pos puis on les corrige et on récupère la moitié des parents et la moitié des enfants"""
@@ -94,22 +97,32 @@ class Genetique():
                 self.meilleure_solution = candidat
         
 
-    def recherche(self,nb_iterations : int):
+    def recherche(self,nb_iterations : int,flowshop : Flowshop,taux_mutation : int,duree : int, ordoInit : Ordonnancement|None = None):
         """méthode principale du GA pour trouver une solution optimale à un flow shop"""
+        pos = random.randint(0,len(self.population[0]))
+        self.croisement(pos)
+        self.mutation()
+        self.eval()
+        liste_jobs = [None for _ in range(len(self.meilleure_solution))]
+        if ordoInit == None:
+            lst_job_shuffled = flowshop.liste_jobs.copy()
+            shuffle(lst_job_shuffled)
+            ordoInit = Ordonnancement(flowshop.nb_machines, lst_job_shuffled)
+        print("Solution Initiale :")
+        ordoInit.afficher_ordo()
         temps_debut=time.time()
-        while (time.time() - temps_debut) < 300:
+        while (time.time() - temps_debut) < duree:
             pos = random.randint(0,len(self.population[0]))
             self.croisement(pos)
             self.mutation()
             self.eval()
-        time.sleep(1)
         "for i in range(nb_iterations):"
         "pos = random.randint(0,len(self.population[0]))"
         "self.croisement(pos)"
         "self.mutation()"
         "self.eval()"
         print("La meilleur solution trouvée avec l'algorithme génétique au bout de ",nb_iterations," itérations est :")
-        liste_jobs = [None for _ in range(len(self.meilleure_solution))]
+        
         for i in range(len(self.meilleure_solution)) :
             for job in self.flowshop.liste_jobs:
                 if job.num_job == self.meilleure_solution[i] :
@@ -117,18 +130,22 @@ class Genetique():
         Ordonnancement(self.flowshop.nb_machines,liste_jobs).afficher_ordo()
         print("population de ",self.taille_population,".")
 
-
-
 if __name__ == "__main__":
     # print(Flowshop.lire_flowshop("jeu2-704.txt").afficher_flowshop())
-    algo = Genetique(500,Flowshop.lire_flowshop("tai31.txt"),0.4)
-    algo2 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
-    algo3 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
-    algo4 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
-    algo5 = Genetique(100,Flowshop.lire_flowshop("tai31.txt"),0.2)
+    flowshop = Flowshop.lire_flowshop("tai31.txt")
+    taux_mutation = 0.4
+    duree = 300
+    taille_population = 500
+    nombre_iterations = 5000
+    algo = Genetique(taille_population,flowshop,taux_mutation)
+    algo2 = Genetique(taille_population,flowshop,taux_mutation)
+    algo3 = Genetique(taille_population,flowshop,taux_mutation)
+    algo4 = Genetique(taille_population,flowshop,taux_mutation)
+    algo5 = Genetique(taille_population,flowshop,taux_mutation)
     # algo.croisement(2)
-    algo.recherche(5000)
+    algo.recherche(nombre_iterations,flowshop,taux_mutation,duree)
     "algo2.recherche(5000)"
     "algo3.recherche(5000)"
     "algo4.recherche(5000)"
     "algo5.recherche(5000)"
+
