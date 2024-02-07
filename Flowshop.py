@@ -47,8 +47,6 @@ class Flowshop:
         temps_tot_jobs = [[sum(job.temps_machines), job] for job in self.liste_jobs]
         temps_tot_jobs.sort(key=lambda j: j[0], reverse = True)
         seq_NEH.append(temps_tot_jobs[0][1])
-        for j in temps_tot_jobs:
-            j[1].afficher_job()
         for i in range(1,len(temps_tot_jobs)):
             seq_NEH_Avant = seq_NEH.copy()
             seq_NEH.append(temps_tot_jobs[i][1])

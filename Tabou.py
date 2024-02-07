@@ -1,7 +1,8 @@
 from Flowshop import Flowshop
 from Ordonnancement import Ordonnancement
 import queue
-from random import randint,shuffle
+from random import shuffle
+from time import time
 
 
 class Tabou :
@@ -10,7 +11,7 @@ class Tabou :
             tabouList.get()
         tabouList.put(sol)
 
-    def recherche(flowshop : Flowshop, maxTabou : int, ordoInit : Ordonnancement|None = None, repmax=1000) -> Ordonnancement:
+    def recherche(flowshop : Flowshop, maxTabou : int, ordoInit : Ordonnancement|None = None, repmax=1000, durationMax = 300) -> Ordonnancement:
         nb_machines = flowshop.nb_machines
         if ordoInit == None:
             lst_job_shuffled = flowshop.liste_jobs.copy()
@@ -28,8 +29,8 @@ class Tabou :
         # print("imax = ", imax)
         # Make a break if the solution is not improving for repmax iterations
         lastBestValueCount = 0
-
-        while lastBestValueCount < repmax and i < imax:
+        timeStart = time()
+        while lastBestValueCount < repmax and i < imax and time() - timeStart < durationMax:
             i += 1
             listNeighbours = bestCandidate.getAllVoisCouple()
             for candidate in listNeighbours:

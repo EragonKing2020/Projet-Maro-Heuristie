@@ -6,14 +6,30 @@ from Tabou import Tabou
 import os
 
 def test():
-    flowshop = Flowshop.lire_flowshop(os.getcwd() + "\jeu4-844.txt")
-    #lst_NEH = flowshop.liste_NEH()
-    #Ordonnancement(5, lst_NEH).afficher_ordo()
-    #Recuit.recherche(flowshop, 5, 300, Ordonnancement(flowshop.nb_machines, flowshop.liste_NEH())).afficher_ordo()
-    #Recuit.recherche(flowshop, 1, 300).afficher_ordo()
-    Tabou.recherche(flowshop, 25).afficher_ordo()
+    flowshop = Flowshop.lire_flowshop(os.getcwd() + "\\tai01.txt")
+    lst_NEH = flowshop.liste_NEH()
+    print("liste NEH")
+    Ordonnancement(flowshop.nb_machines, lst_NEH).afficher_ordo()
+    Recuit.recherche(flowshop, 1e14, 300, Ordonnancement(flowshop.nb_machines, flowshop.liste_NEH())).afficher_ordo()
+    #Recuit.recherche(flowshop, 1e14, 300).afficher_ordo()
+    #Tabou.recherche(flowshop, 25).afficher_ordo()
+    #Tabou.recherche(flowshop, 25, ordoInit=Ordonnancement(flowshop.nb_machines, flowshop.liste_NEH())).afficher_ordo()
 
-test()
+#test()
+
+def allTest():
+    files = ["\\tai01.txt", "\\tai11.txt", "\\tai21.txt", "\\tai31.txt" , "\\tai41.txt", "\\tai51.txt"] #
+    for file in files:
+        print("##################################################################")
+        print(file)
+        print("##################################################################")
+        flowshop = Flowshop.lire_flowshop(os.getcwd() + file)
+        lst_NEH = flowshop.liste_NEH()
+        print("liste NEH")
+        Ordonnancement(flowshop.nb_machines, lst_NEH).afficher_ordo()
+        Recuit.recherche(flowshop, 1e14, 300, Ordonnancement(flowshop.nb_machines, flowshop.liste_NEH())).afficher_ordo()
+
+#allTest()
 
 def test1():
     job1 = Job(1, [1,2,3])

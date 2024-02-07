@@ -120,7 +120,7 @@ class Ordonnancement:
 
     def getAllVoisExchangeSeq(self):
         n = self.getNbJobs()
-        lstAllVois = [None for _ in range()]
+        lstAllVois = [None for _ in range(sum([sum([sum([sum([1 for i4 in range(i3 + 1, n + 2)]) for i3 in range(i2, n + 1)]) for i2 in range(i1 + 1, n + 1)]) for i1 in range(1, n)]))]
         i = 0
         for i1 in range(self.getNbJobs()-1):
             for i2 in range(i1 + 1, self.getNbJobs()):
@@ -128,3 +128,4 @@ class Ordonnancement:
                     for i4 in range(i3 + 1, self.getNbJobs() + 1):
                         lstAllVois[i] = self.getVoisExchangeSeq(i1, i2, i3, i4)
                         i += 1
+        return lstAllVois
